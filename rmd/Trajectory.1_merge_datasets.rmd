@@ -1,0 +1,70 @@
+---
+title: "Merge Seurat objects for trajectory analysis"
+author: "Xuefei Yuan"
+date: "11/16/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width = 4, fig.height = 5)
+knitr::opts_knit$set(root.dir = '/Users/yuanxuef/Dropbox (Wilson Lab)/wilson_lab/gata5_sc/Github/')
+```
+
+### Preliminaries
+```{r, message=FALSE}
+### packages and functions needed
+library(Seurat)
+library(sctransform)
+```
+
+### Load input from Seurat analysis
+```{r data_loading, warning=FALSE}
+e.6hpf <- readRDS("Rdata/wt_6hpf.rds")
+e.8hpf <- readRDS("Rdata/wt_8hpf.rds")
+e.10hpf <- readRDS("Rdata/wt_10hpf.rds")
+e.13hpf <- readRDS("Rdata/wt_13hpf.rds")
+
+s.ls <- list("6hpf"=e.6hpf, "8hpf"=e.8hpf, "10hpf"=e.10hpf,"13hpf"=e.13hpf)
+
+```
+
+### Rename cluster id to prepare for mergeing objects 
+```{r rename, warning=FALSE}
+### add timestamp into all the cluster id to avoid confusion after merging
+s.ls <- lapply(names(s.ls), function(x){
+  s.ls[[x]]@active.ident <- as.factor(sapply(s.ls[[x]]@active.ident, function(n) paste0(x, ".",n)))
+  #names(s.ls[[x]]) <- x
+  return(s.ls[[x]])
+})
+names(s.ls) <- list("6hpf", "8hpf", "10hpf", "13hpf")
+### check the cluster id after renaming
+table(s.ls[[1]]@active.ident)
+
+```
+
+### Merge four timepoints into one Seurat object
+```{r merge, warning=FALSE, eval=FALSE}
+### merge 4 WT samples
+e <- merge(s.ls[[1]], y=c(s.ls[[2]], s.ls[[3]], s.ls[[4]]), 
+           add.cell.ids = c("6hpf", "8hpf", "10hpf", "13hpf"), project = "all")
+
+### free up some space
+remove(e.6hpf, e.8hpf, e.10hpf, e.13hpf, s.ls)
+
+```
+
+### WT_4_samples: SCTransform on the merged object
+```{r wt_4, eval=F}
+cc.genes <- readLines(con = "other_files/regev_lab_cell_cycle_genes_zebrafish.txt")
+s.genes <- cc.genes[1:43]
+g2m.genes <- cc.genes[44:96]
+
+### SCT normalization, return all the genes as variable genes will be calculated again after subsetting each lineage
+e.SCT <- SCTransform(e, vars.to.regress = c("percent.mt", "S.Score", "G2M.Score", "nCount_RNA"),
+                     verbose = T, return.only.var.genes = F)
+
+### save the merged object for trajectory analysis
+saveRDS(e.SCT, file = "wt_4sample.SCT.rds")
+
+```
+

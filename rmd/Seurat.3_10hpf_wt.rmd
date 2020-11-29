@@ -1,0 +1,145 @@
+---
+title: "WT 10hpf data Seurat analysis"
+author: "Xuefei Yuan"
+date: "11/15/2020"
+output: html_document
+---
+
+```{r "setup", include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width = 4, fig.height = 5)
+knitr::opts_knit$set(root.dir = '/home/xuefei/Github/')
+```
+
+### Summary
+This file contains analyses needed for Supplementary Fig.1, starting from the gene-cell count matrix
+
+
+### Preliminaries {-}
+```{r, message=FALSE}
+### packages and functions needed
+library(Seurat)
+library(ggplot2)
+library(sctransform)
+source("customized_function_seurat.R")
+
+```
+
+
+### Data loading and filtering
+```{r data_loading, message=FALSE, cache=T, warning=FALSE}
+## ## We load the gene-cell count matrix (output from CellRanger) to creat a Seurat Object.
+
+gbm <- CreateSeuratObject(counts = Read10X("./matrix_data/wt_10hpf_gbm/"),
+                          min.cells = 3,  project = "wt_10hpf")
+
+### calculate the percentage of mitochondrial reads in each cell 
+gbm <- PercentageFeatureSet(object = gbm, pattern = "^mt-", col.name = "percent.mt")
+
+```
+
+### Plot the distribution of UMI counts, number of genes detected in the raw data
+```{r quality_check, message=FALSE, warning=FALSE}
+## fuction for plotting the distribution of nCount_RNA, nFeature_RNA, percent.mt figure
+plot_nGene_nUMI_mito(gbm = gbm, raw_data=T) 
+```
+
+### Filter low-quality cells and potential doublets then plot the distribution again
+```{r filter, cache=T, message=FALSE, warning=FALSE}
+gbm <- subset(x = gbm, subset = nCount_RNA < 12000 & nFeature_RNA > 500 & percent.mt < 4)
+## fuction for plotting the distribution of nCount_RNA, nFeature_RNA, percent.mt figure
+plot_nGene_nUMI_mito(gbm = gbm, raw_data=F) 
+```
+
+
+
+### SCTransform for normalization, find variable genes, data scaling and PCA
+```{r SCTransform, eval=FALSE}
+### cell cycle genes determined in PMID: 26430063
+cc.genes <- readLines(con = "./other_files/regev_lab_cell_cycle_genes_zebrafish.txt")
+s.genes <- cc.genes[1:43]
+g2m.genes <- cc.genes[44:96]
+gbm <- CellCycleScoring(object = gbm, s.features = s.genes, g2m.features = g2m.genes, set.ident = F)
+
+gbm <- SCTransform(object = gbm, vars.to.regress = c("percent.mt", "S.Score", "G2M.Score", "nCount_RNA"), 
+                   verbose = T, variable.features.n = 3000) 
+
+gbm <- RunPCA(object = gbm, verbose = T, npcs = 60)
+gbm <- JackStraw(object = gbm, num.replicate = 100, dims = 50)
+gbm <- ScoreJackStraw(object = gbm, dims = 1:50)
+
+```
+
+```{r echo=FALSE}
+## some colde above and below for demonstration purposes, load the preprocessed data to save time
+load("./Rdata/wt_10hpf.RData")
+```
+
+
+### Jack Straw and Elbow plot to determine the PC numbers to use
+```{r JackStrawPlot,warning=F, cache=T, fig.width=7, fig.height=4.5}
+JackStrawPlot(object = gbm, dims = 1:30)
+
+```
+
+```{r ElbowPlot, warning=F, cache=T,  fig.width=4, fig.height=3.5}
+ElbowPlot(object = gbm, ndims = 60)
+```
+
+### UMAP visualization and clustering
+```{r UMAP, eval=FALSE}
+gbm <- RunUMAP(object = gbm, dims = 1:9, verbose = T, min.dist = 0.3,
+               n.neighbors = 30, n.epochs = 500, set.op.mix.ratio = 0.5)
+
+gbm <- FindNeighbors(object = gbm, dims = 1:9, verbose = T, prune.SNN = 1/15, k.param = 20)
+gbm <- FindClusters(object = gbm, verbose = T, resolution = 1.5)
+## note that in Seurat cluster numbers start with 0, but we change it to starting with 1 in all our figures
+```
+
+```{r clusters, warning=FALSE, fig.width = 6, fig.height = 5}
+## plot by cluster
+DimPlot(object = gbm, label = TRUE, reduction = "umap", pt.size =0.5)
+```
+
+
+### Differential analysis to identify marker genes for each cluster
+```{r find_markers,eval=FALSE}
+### run all different methods
+method.ls <- list("wilcox", "bimod", "roc", "poisson", "negbinom", "LR", "MAST")
+
+diff.glob.ls <- lapply(method.ls, 
+                       function(x) FindAllMarkers(gbm, min.pct = 0.1, logfc.threshold = 0.25, 
+                                                  only.pos = T, test.use=x, return.thresh = 0.01))
+names(diff.glob.ls) <- method.ls
+### plot the marker genes identified by different methods and save in the heatmaps as pdf for examination
+lapply(method.ls, function(x) plotHeatmap(gbm=gbm, test.use = x, topN=40, diff.ls = diff.glob.ls))
+
+```
+
+### select the top genes to plot
+```{r plot_heatmap_1, warning=FALSE, fig.width = 8, fig.height = 6.5, message=FALSE}
+## genes plotted in supplementary Figure
+genes.plot <- c("foxa2","sox17", "aldob", "hbbe1.3","hbae3",
+                "meis3", "meis2b","tmem88a", "hand2" ,"fsta",
+                "cdx4", "lbx2","pax8","pax2a","tbx16",
+                "aplnra", "twist1a", "ripply1", "cyp26c1", "foxc1a",
+                "lmo4b", "bambia", "bmp6", "qkia", "szl",
+                "ta", "foxd5", "sept9a", "hes6","fgf8a", 
+                "nkx2.7", "rbpms2a", "gata6", "foxh1", "ttn.2", 
+                "tram1", "xbp1","ctslb","calr3b", "he1a", 
+                "foxd2","colec12", "tcf15", "vcana", "reck", 
+                 "apoc1","tbx2a","tbx3a", "hnf1ba", "sash1a")
+
+```
+
+```{r plot_heatmap_2, warning=FALSE, fig.width = 8, fig.height = 9.5}
+### heatmap in supplementary figures
+DoHeatmap(object = gbm, features = genes.plot)
+```
+
+
+
+### Save Seurat object for other analysis
+```{r eval=F}
+saveRDS(gbm, file = "./Rdata/wt_10hpf.rds")
+```
+

@@ -1,0 +1,177 @@
+---
+title: "Cardiopharyngeal sub-clustering analysis"
+author: "Xuefei Yuan"
+date: "11/15/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width = 4, fig.height = 4)
+knitr::opts_knit$set(root.dir = '/home/xuefei/Github/')
+```
+
+
+### Summary
+This file contains analyses needed for making Fig.3 and Supplementary Fig.3
+
+
+### Preliminaries {-}
+```{r, message=FALSE}
+### packages and functions needed
+library(Seurat)
+library(ggplot2)
+library(sctransform)
+source("customized_function_seurat.R")
+
+```
+
+### Data subset and rerun PCA analysis
+```{r data_subset, eval=FALSE}
+### load the 13hpf_2sample Seurat object from previous analysis
+gbm <- readRDS("Rdata/wt_g56KD_13hpf.rds")
+
+### select the cardiopharyngeal clusters
+cp.meso <- SubsetData(object = gbm, ident.use = c(9,1, 12, 0, 4))
+cp.meso@project.name <- "cardiac_pharyn.13hpf_2s"
+
+
+cp.meso <- RunPCA(object = cp.meso, verbose = T, npcs = 60, ndims.print = 1:10)
+cp.meso <- JackStraw(object = cp.meso, num.replicate = 100, dims = 50)
+cp.meso <- ScoreJackStraw(object = cp.meso, dims = 1:50)
+```
+
+```{r echo=FALSE, cache=T}
+## some colde above and below for demonstration purposes, load the preprocessed data to save time
+load("./Rdata/cpm_2s_13hpf.RData")
+gbm <- readRDS("Rdata/wt_g56KD_13hpf.rds")
+```
+
+### Jack Straw and Elbow plot to determine the PC numbers to use
+```{r JackStrawPlot,warning=F, cache=T, fig.width=7, fig.height=4}
+JackStrawPlot(object = cp.meso, dims = 1:30)
+
+```
+
+```{r ElbowPlot, warning=F, cache=T}
+ElbowPlot(object = cp.meso, ndims = 60)
+```
+
+### UMAP visualization and clustering
+```{r clustering, eval=FALSE}
+cp.meso <- RunUMAP(object = cp.meso, dims = 1:15, verbose = T, min.dist = 0.1,
+               n.neighbors = 30, n.epochs = 500, set.op.mix.ratio = 0.5)
+
+cp.meso <- FindNeighbors(object = cp.meso, dims = 1:15, verbose = T, prune.SNN = 1/15, k.param = 20)
+cp.meso <- FindClusters(object = cp.meso, verbose = T, resolution = 0.8)
+```
+
+```{r umap_clusters, warning=FALSE, fig.width = 5, fig.height = 4}
+## plot by cluster
+DimPlot(object = cp.meso, label = TRUE, reduction = "umap", pt.size =0.5)
+```
+
+```{r umap_sample, warning=FALSE, fig.width = 6, fig.height = 4}
+## plot by sample
+DimPlot(object = cp.meso, label = TRUE, pt.size =0.5, group.by = "orig.ident" )
+```
+
+### Differential analysis to identify marker genes for each cluster
+```{r find_markers,eval=FALSE}
+### run different methods
+method.ls2 <- list("wilcox", "bimod", "poisson", "negbinom", "LR", "MAST")
+cp_meso.glob.ls <- lapply(method.ls2, 
+                       function(x) FindAllMarkers(cp.meso, min.pct = 0.1, logfc.threshold = 0.25, 
+                                                  only.pos = T, test.use=x, return.thresh = 0.01))
+#diff.glob.ls <- lapply(method.ls, function(x) diff_plotHeatmap(gbm = gbm, test.use = x, topN = 40, w=12))
+names(cp_meso.glob.ls) <- method.ls2
+### plot the marker genes identified by different methods and save in the heatmaps as pdf for examination
+lapply(method.ls2, function(x) plotHeatmap(gbm=cp.meso, test.use = x, topN=40, diff.ls = cp_meso.glob.ls))
+
+```
+
+### select the top genes to plot
+```{r plot_heatmap_1, warning=FALSE, fig.width = 8, fig.height = 7, message=FALSE}
+## genes plotted in supplementary Figure
+cp.genes1 <- c("gata5", "gata6","aldh1a2","meis3","hoxa3a","meis1a","adra1d", 
+               "cxcl12a", "cthrc1a", "twist1b", "efnb2a","pcdh10b", "arl4aa", 
+               "kazald2", "meox1", "emp2", "tenm3", "ntn1a", "fgfr2",
+               "qkia", "slc9a3r1","podxl","ttn.2","hand2", "tdgf1","mef2ca", 
+               "irx1b", "pitx3", "cyp26c1", "nkx2.7", "eya2", "pitx2", "rgl1",
+               "col15a1b", "sash1a", "ism1", "foxd1","lhfp","rasl11a","irx5b",
+               "foxf2a", "snd1", "fzd8b", "six3b","lmx1bb","pnocb","acp5a", 
+               "junba", "id3", "nr2f1a", "rbpms2b", "rab5b","meis2b","hoxb5a", 
+               "synpo2lb", "wnt11r", "ackr3b", "fgf10a", "hey2", "fgf20b", "zdhhc2")
+
+### gene selection taking ISH marker genes into consideration, plot in the main figure
+cp.genes2 <- c("aldh1a2", "meis3","hoxa3a","meis1a",
+               "cxcl12a", "cthrc1a", "twist1b", "efnb2a", 
+               "kazald2", "meox1", "emp2", "tenm3", 
+               "qkia", "hand2", "tdgf1","mef2cb", 
+               "irx1b", "pitx3", "cyp26c1", "nkx2.7", 
+               "col15a1b", "sash1a", "ism1", "foxd1",
+               "foxf2a", "snd1", "fzd8b", "six3b",
+               "junba", "id3", "nr2f1a", "rbpms2b",
+               "synpo2lb", "wnt11r", "fgf8a", "fgf10a")
+
+### make the dot plot in the main figure
+DotPlot.m(object = cp.meso, features = cp.genes2, dot.scale = 3.8, split.by = "orig.ident")
+
+```
+
+```{r plot_heatmap_2, warning=FALSE, fig.width = 8, fig.height = 10}
+### heatmap in supplementary figures
+DoHeatmap(object = cp.meso, features = cp.genes1)
+```
+
+```{r plot_heatmap_3, warning=FALSE, fig.width = 10, fig.height = 10}
+DoHeatmap.m(object = cp.meso, features = cp.genes1, split.by = "orig.ident")
+```
+
+### Calculate cell composition changes
+```{r cell_comp_cal}
+cp.perc.df <- prop.table(x = table(cp.meso@active.ident, cp.meso@meta.data[, "orig.ident"]), 
+                          margin = 2)
+#table(gbm.2@ident, gbm.2@meta.data$orig.ident)
+cp.perc.df <- data.frame("wt.13hpf"=cp.perc.df[, 2],
+                          "gata56MO.13hpf"=cp.perc.df[, 1])
+### calculate FC based on the total population
+cp.fac <- as.data.frame(table(gbm$orig.ident)/table(cp.meso$orig.ident))
+cp.perc.df$wt.13hpf.inAll <- cp.perc.df$wt.13hpf/cp.fac$Freq[2]
+cp.perc.df$gata56MO.13hpf.inAll <- cp.perc.df$gata56MO.13hpf/cp.fac$Freq[1]
+
+cp.perc.df$FC <- sapply(rownames(cp.perc.df), 
+                         function(x) cp.perc.df[x, "gata56MO.13hpf.inAll"]/cp.perc.df[x, "wt.13hpf.inAll"])
+cp.perc.df <- cp.perc.df[order(cp.perc.df$FC, decreasing = F), ]
+cp.perc.df$cluster_id <- rownames(cp.perc.df)
+### make sure sort the plot by FC
+cp.perc.df$cluster_id <- factor(cp.perc.df$cluster_id, levels = cp.perc.df$cluster_id)
+### To use the same color as that used in TSNE cluster plot
+cp.perc.df$color_col <- c("03", "07", "08", "06",
+                           "05", "02", "01", "04", "00")
+
+### calculate if the proportion change is significant
+cp.prop.df <- getStats_FC(gbm=cp.meso, allcells = gbm) ### stat results table
+
+cp.perc.df <- cbind(cp.perc.df, cp.prop.df[rownames(cp.perc.df) , 2:3])
+
+cp.perc.df$ave_perc <- (cp.perc.df$wt.13hpf+cp.perc.df$gata56MO.13hpf)/2
+### the proportion of each cluster within all gata5 population
+```
+
+```{r cell_comp_plot}
+### bar plot
+ggplot(cp.perc.df)+
+  geom_col(aes(cluster_id, log10(FC), fill=color_col))+
+  guides(fill=F)+coord_flip()+
+  ylab("Log10(% in gata56MO/% in WT)")
+
+
+## dot plot
+ggplot(cp.perc.df)+
+  geom_point(aes(cluster_id, log10(FC), color=color_col, size=wt.13hpf.inAll))+
+  guides(color=F)+coord_flip()+
+  scale_y_continuous(limits = c(-2, 1))+
+  scale_size_continuous(breaks = c("1.5%"=0.01562, "4.0%"=0.04, "6.5%"=0.065,"9.0%"=0.09))+
+  ylab("Log10(% in gata56MO/% in WT)")
+
+```

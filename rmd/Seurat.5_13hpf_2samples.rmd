@@ -1,0 +1,287 @@
+---
+title: "WT and Gata5/6 MO 13hpf combined data Seurat analysis"
+author: "Xuefei Yuan"
+date: "11/15/2020"
+output: html_document
+---
+
+```{r "setup", include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width = 4, fig.height = 5)
+knitr::opts_knit$set(root.dir = '/home/xuefei/Github/')
+```
+
+### Summary
+This file contains analyses needed for making Fig.2 and Supplementary Fig.2, starting from the gene-cell count matrix
+
+
+### Preliminaries {-}
+```{r, message=FALSE}
+### packages and functions needed
+library(Seurat)
+library(ggplot2)
+library(sctransform)
+source("customized_function_seurat.R")
+```
+
+
+### Data loading and filtering
+```{r data_loading, message=FALSE, cache=T, warning=FALSE}
+## ## We load the gene-cell count matrix (output from CellRanger) to creat a Seurat Object and merge the WT and MO datasets
+
+gbm <- merge(
+  x = CreateSeuratObject(counts = Read10X("matrix_data/wt_13hpf_gbm/"),min.cells = 3,  project = "wt_13hpf"), 
+  y = CreateSeuratObject(counts = Read10X("matrix_data/mo_13hpf_gbm/"),min.cells = 3, project = "g56mo_13hpf"), 
+  add.cell.id1 = "wt.13hpf", add.cell.id2 = "mo.13hpf", project = "13hpf_2sample")
+
+### calculate the percentage of mitochondrial reads in each cell 
+gbm <- PercentageFeatureSet(object = gbm, pattern = "^mt-", col.name = "percent.mt")
+
+```
+
+### Plot the distribution of UMI counts, number of genes detected in the raw data
+```{r quality_check, message=FALSE, warning=FALSE}
+## fuction for plotting the distribution of nCount_RNA, nFeature_RNA, percent.mt figure
+plot_nGene_nUMI_mito(gbm = gbm, raw_data=T) 
+```
+
+### Filter low-quality cells and potential doublets then plot the distribution again
+```{r filter, cache=T}
+gbm <- subset(x = gbm, subset = nCount_RNA < 30000 & nFeature_RNA > 1000 & percent.mt < 4)
+## fuction for plotting the distribution of nCount_RNA, nFeature_RNA, percent.mt figure
+plot_nGene_nUMI_mito(gbm = gbm, raw_data=F) 
+```
+
+
+
+### SCTransform for normalization, find variable genes, data scaling and PCA
+```{r SCTransform, eval=FALSE}
+### cell cycle genes determined in PMID: 26430063
+cc.genes <- readLines(con ="./other_files/regev_lab_cell_cycle_genes_zebrafish.txt")
+s.genes <- cc.genes[1:43]
+g2m.genes <- cc.genes[44:96]
+gbm <- CellCycleScoring(object = gbm, s.features = s.genes, g2m.features = g2m.genes, set.ident = F)
+
+gbm <- SCTransform(object = gbm, vars.to.regress = c("percent.mt", "S.Score", "G2M.Score", "nCount_RNA"), verbose = T, variable.features.n = 3000) 
+
+gbm <- RunPCA(object = gbm, verbose = T, npcs = 60)
+gbm <- JackStraw(object = gbm, num.replicate = 100, dims = 50)
+gbm <- ScoreJackStraw(object = gbm, dims = 1:50)
+
+```
+
+```{r echo=FALSE}
+## some colde above and below for demonstration purposes, load the preprocessed data to save time
+load("./Rdata/wt_g56KD_13hpf.RData")
+```
+
+
+### Jack Straw and Elbow plot to determine the PC numbers to use
+```{r JackStrawPlot,warning=F, cache=T, fig.width=9, fig.height=5}
+JackStrawPlot(object = gbm, dims = 1:30)
+
+```
+
+```{r ElbowPlot, warning=F, cache=T, fig.width=4, fig.height=4}
+ElbowPlot(object = gbm, ndims = 60)
+```
+
+### UMAP visualization and clustering
+```{r UMAP, eval=FALSE}
+gbm <- RunUMAP(object = gbm, dims = 1:20, verbose = T, min.dist = 0.3,
+               n.neighbors = 30, n.epochs = 500, set.op.mix.ratio = 0.5)
+
+gbm <- FindNeighbors(object = gbm, dims = 1:20, verbose = T, prune.SNN = 1/15, k.param = 20)
+gbm <- FindClusters(object = gbm, verbose = T, resolution = 1.5)
+## note that in Seurat cluster numbers start with 0, but we change it to starting with 1 in all our figures
+```
+
+```{r umap_clusters, warning=FALSE, fig.width = 6, fig.height = 5}
+## plot by cluster
+DimPlot(object = gbm, label = TRUE, reduction = "umap", pt.size =0.5)
+```
+
+```{r umap_sample, warning=FALSE, fig.width = 7, fig.height = 5}
+## plot by sample
+DimPlot(object = gbm, label = TRUE, pt.size =0.5, group.by = "orig.ident" )
+```
+
+### Differential analysis to identify marker genes for each cluster
+```{r find_markers,eval=FALSE}
+### run all different methods
+method.ls <- list("wilcox", "bimod", "roc", "poisson", "negbinom", "LR", "MAST")
+
+diff.glob.ls <- lapply(method.ls, 
+                       function(x) FindAllMarkers(gbm, min.pct = 0.1, logfc.threshold = 0.25, 
+                                                  only.pos = T, test.use=x, return.thresh = 0.01))
+names(diff.glob.ls) <- method.ls
+### plot the marker genes identified by different methods and save in the heatmaps as pdf
+lapply(method.ls, function(x) plotHeatmap(gbm=gbm, test.use = x, topN=40))
+
+```
+
+### select the top genes to plot
+```{r plot_heatmap_1, warning=FALSE, fig.width = 9, fig.height = 7, message=FALSE}
+## genes plotted in supplementary Figure
+genes.plot <- c("thbs3b","cthrc1a", "twist1b","fsta","kirrelb",
+                "meis1a",  "aldh1a2", "meis2b", "dhrs3a", "FRMD1", 
+                "foxj1a", "hnf1bb", "acy3.2","pax2a","gem",
+                "gata1a",  "cldng", "gfi1aa","tal1","morc3b",
+                "col15a1b", "marcksl1b","pknox2", "foxf2a","pitx3",
+                "foxa2", "mcama","prdx5", "cd9b", "bcam", 
+                "hand2", "cdx4","pdgfra", "msx3","nos1apa",
+                "hoxa11b", "hoxd10a", "msx2b","tbx16","bambia",
+                "eve1", "msgn1",  "cyp26a1", "snai1a","her7",
+                "mef2ca", "ttn.2", "nkx2.5", "bmp6","mef2cb",
+                "foxa3","onecut1", "nr5a2", "limk2", "hbbe1.2", ## liver endoderm
+                "hbbe1.1", "hbae3", "myb","blf", "klf3",
+                "irx1b", "eya2", "rgl1", "rspo3","efna5a",
+                "fli1b", "she", "kdrl","cdh5","hey2",
+                 "he1b",  "ctslb",
+                 "hyou1", "inhbaa",
+                "myod1", "ttn.1", 
+                "cldni",  "cyt1" ## epidermis
+                
+                )
+### genes plotted in the main figure
+genes.plot2 <- c("thbs3b","cthrc1a",
+                 "meis2b", "dhrs3a",
+                 "foxj1a", "hnf1bb",
+                 "gata1a", "gfi1aa",
+                 "col15a1b", "pknox2",
+                 "foxa2", "cd9b", 
+                 "hand2", "pdgfra",
+                 "hoxa11b", "msx2b",
+                 "eve1", "msgn1",
+                 "mef2ca", "ttn.2",
+                 "onecut1", "nr5a2", ## liver endoderm
+                 "hbbe1.1", "myb", 
+                 "irx1b", "eya2",
+                 "fli1b", "kdrl",
+                 "ctslb","he1b",
+                 "hyou1", "inhbaa",
+                 "myod1", "ttn.1", 
+                 "cldni",  "cyt1" ## epidermis
+                 
+)
+
+### make the dot plot in the main figure
+DotPlot.m(object = gbm, features = genes.plot2, dot.scale = 4,split.by = "orig.ident")
+
+```
+
+```{r plot_heatmap_2, warning=FALSE, fig.width = 9, fig.height = 12}
+### heatmap in supplementary figures
+DoHeatmap(object = gbm, features = genes.plot)
+```
+
+```{r plot_heatmap_3, warning=FALSE, fig.width = 18, fig.height = 12}
+DoHeatmap.m(object = gbm, features = genes.plot, split.by = "orig.ident")
+```
+
+### Calculate cell composition changes
+```{r cell_comp_cal}
+perc_table <- prop.table(x = table(gbm@active.ident, gbm@meta.data[, "orig.ident"]), 
+                         margin = 2)
+#table(gbm.2@ident, gbm.2@meta.data$orig.ident)
+perc.df <- data.frame("wt.13hpf"=perc_table[, 2],
+                      "gata56MO.13hpf"=perc_table[, 1])
+perc.df$FC <- sapply(rownames(perc.df), function(x) (perc.df[x, "gata56MO.13hpf"]-perc.df[x, "wt.13hpf"])/perc.df[x, "wt.13hpf"])
+perc.df <- perc.df[order(perc.df$FC, decreasing = F), ]
+perc.df$cluster_id <- rownames(perc.df)
+### make sure sort the plot by FC
+perc.df$cluster_id <- factor(perc.df$cluster_id, levels = perc.df$cluster_id)
+### To use the same color as that used in TSNE cluster plot
+perc.df$color_col <- c("09", "17", "07", "06", "10", "02",
+                       "11", "08", "05", "13", "15", "14", "04", 
+                       "16", "01", "03" , "00", "12")
+
+### calculate if the proportion change is significant
+prop.df <- getStats_FC(gbm=gbm) ### stat results table
+
+perc.df <- cbind(perc.df, prop.df[rownames(perc.df) , 2:3])
+perc.df$stars <- "*"
+perc.df[perc.df$p.adj.Fisher > 0.05, "stars"] <- NA
+
+```
+
+```{r cell_comp_plot}
+### bar plot
+ggplot(perc.df)+
+  geom_col(aes(cluster_id, log10(FC+1), fill=color_col))+
+  guides(fill=F)+coord_flip()+
+  ylab("Log10(% in gata56MO/% in WT)")
+
+
+## dot plot
+ggplot(perc.df)+
+  geom_point(aes(cluster_id, log10(FC+1), color=color_col, size=wt.13hpf))+
+  guides(color=F)+coord_flip()+scale_y_continuous(limits = c(-2, 0.5))+
+  scale_size_continuous(breaks = c("1%"=0.01, "4%"=0.04, "7%"=0.07, "10%"=0.10))+
+  ylab("Log10(% in gata56MO/% in WT)")
+
+```
+
+### Calculate cell composition changes after the cardiac cluster is removed
+```{r cell_comp_cal2}
+### remove the cardiac cluster and caculate the fold change again to see if other expansions were driven by this cardiac depletion
+noCardi.stat.df <- getStats_FC(gbm = gbm, toRemove = c("9"))
+
+noCardi_table <- prop.table(x = table(gbm@active.ident, gbm@meta.data[, "orig.ident"])[-c(10), ], margin = 2)
+#table(gbm.2@ident, gbm.2@meta.data$orig.ident)
+noCardi.df <- data.frame("wt.13hpf"=noCardi_table[, 2],
+                         "gata56MO.13hpf"=noCardi_table[, 1])
+noCardi.df$FC <- sapply(rownames(noCardi.df), 
+                        function(x) (noCardi.df[x, "gata56MO.13hpf"]-noCardi.df[x, "wt.13hpf"])/noCardi.df[x, "wt.13hpf"])
+### make sure sort the plot by FC
+noCardi.df <- noCardi.df[order(noCardi.df$FC, decreasing = F), ]
+noCardi.df$cluster_id <- rownames(noCardi.df)
+
+### To make the color scheme consistent with the original plot, mannually add a row to the table with artificial value
+### set FC to NA so it won't be ploted at the end
+noCardi.df <- rbind(data.frame(wt.13hpf=0.05,
+                               gata56MO.13hpf=0.001,
+                               FC=NA,
+                               cluster_id="9"),
+                    noCardi.df)
+rownames(noCardi.df) <- noCardi.df$cluster_id
+
+noCardi.df$cluster_id <- factor(noCardi.df$cluster_id, levels = noCardi.df$cluster_id)
+
+### To use the same color as that used in UMAP cluster plot
+noCardi.df$color_col <- c("09","17", "07", "06", "10", "02",
+                       "11", "08", "05", "13", "15", "14", "04", 
+                       "16", "01", "03" , "00", "12")
+noCardi.df <- cbind(noCardi.df, noCardi.stat.df[rownames(noCardi.df) , 2:3])
+noCardi.df$stars <- "*"
+noCardi.df$p.adj.Fisher[1] <- 1
+noCardi.df[noCardi.df$p.adj.Fisher > 0.05, "stars"] <- NA
+#noCardi.df$p.Fisher <- NULL
+#noCardi.df$p.adj.Fisher <- NULL
+#### use the percentage in real WT samples for plotting
+noCardi.df$wt.13hpf <-perc.df$wt.13hpf
+
+```
+
+```{r cell_comp_plot2, warning=F, message=F}
+### bar plot
+ggplot(noCardi.df)+
+  geom_col(aes(cluster_id, log10(FC+1), fill=color_col))+
+  guides(fill=F)+coord_flip()+
+  ylab("Log10(% in gata56MO/% in WT)")
+
+### dot plot
+ggplot(noCardi.df)+
+  geom_point(aes(cluster_id, log10(FC+1), color=color_col, size=wt.13hpf))+
+  guides(color=F)+coord_flip()+
+  scale_y_continuous(limits = c(-1, 0.5))+
+  scale_size_continuous(breaks = c("1%"=0.01, "4%"=0.04, "7%"=0.07, "10%"=0.10))+
+  ylab("Log10(% in gata56MO/% in WT)")
+
+```
+
+
+### Save Seurat object for subsetting analyses
+```{r eval=F}
+saveRDS(gbm, file = "./Rdata/wt_g56KD_13hpf.rds")
+```
+

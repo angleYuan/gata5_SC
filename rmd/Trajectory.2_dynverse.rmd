@@ -1,0 +1,214 @@
+---
+title: "Trajectory analysis using dynverse package"
+author: "Xuefei Yuan"
+date: "11/16/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width = 4, fig.height = 5)
+knitr::opts_knit$set(root.dir = '/Users/yuanxuef/Dropbox (Wilson Lab)/wilson_lab/gata5_sc/Github/')
+
+```
+### Summary
+This file contains analyses needed for making trajectory figures (Fig.1 and Supplementary Fig.1)
+
+### Preliminaries
+```{r, message=FALSE}
+### packages and functions needed
+library(dyno)
+library(tidyverse)
+library(Seurat)
+library(ggplot2)
+library(cowplot)
+library(RColorBrewer)
+library(gplots)
+source("./customized_function_dynverse.R")
+```
+
+### Load input from Seurat analysis
+```{r input, cache=T, eval=FALSE}
+e.SCT <- readRDS(file="./Rdata/wt_4sample.SCT.rds")
+```
+
+### Prepare for subsetting each lineage
+```{r lineage_prep}
+### cluster ids for each lineage, partition based on fate mapping knowledge and marker gene expression
+### Not all lineages were included in this analysis since the fate map of some population, like mesothelium progenitors is less clear.
+id.ls <- list ("erythroid" = c("6hpf.0", "6hpf.6", "8hpf.2","8hpf.8","10hpf.4","13hpf.0"),
+               "pronephric" = c("6hpf.0", "6hpf.6", "8hpf.2","8hpf.8","10hpf.2","13hpf.1"),
+               "cardiac" = c("6hpf.0", "6hpf.6", "8hpf.1","10hpf.6","13hpf.8"),
+               "atrium_fin" = c("6hpf.0", "6hpf.6", "8hpf.1","10hpf.1","13hpf.3"),
+               "vascular" = c("6hpf.0", "6hpf.6", "8hpf.1","10hpf.1","13hpf.10"),
+               "a_endo" = c("6hpf.5","8hpf.3","10hpf.0","13hpf.4"),
+               "p_endo" = c("6hpf.3","6hpf.4","8hpf.0","10hpf.5","10hpf.9","13hpf.11") ,
+               "presomitic" = c("6hpf.0", "6hpf.6", "8hpf.2","8hpf.8","10hpf.4","10hpf.2","13hpf.9"),
+               "pharyn_1" = c("6hpf.1", "8hpf.4", "8hpf.5", "10hpf.3", "10hpf.8", "13hpf.2"),
+               "pharyn_2" = c("6hpf.1", "8hpf.4", "8hpf.5", "10hpf.3", "10hpf.8", "13hpf.6"),
+               "hatching_1" = c("6hpf.2", "8hpf.6","10hpf.7","13hpf.12"),
+               "hatching_2" = c("6hpf.2", "8hpf.6","10hpf.7","13hpf.13")
+               )
+### For plotting purposes later
+marker.ls <- list ("erythroid" = "gata1a",
+                   "pronephric" = "pax2a",
+                   "cardiac" = "nkx2.5",
+                   "atrium_fin" = "nr2f1a",
+                   "vascular" = "tal1",
+                   "a_endo" = "prdx5",
+                   "p_endo" = "onecut1" ,
+                   "presomitic" = "tbx16",
+                   "pharyn_1" = "twist1b",
+                   "pharyn_2" = "col15a1b",
+                   "hatching_1" = "ctslb",
+                   "hatching_2" = "hyou1"
+                   )
+### note that in Seurat cluster numbers start with 0 (kept in all the codes), but we change it to starting with 1 in all our figures and tables
+```
+
+### Subsetting lineages, find variable genes, conduct PCA  and prepare datasets for dynverse
+```{r subset, eval=FALSE}
+dt.ls <- lapply(c(1:length(id.ls)), 
+                function(x) subset2Dynverse(seurat_o = e.SCT, subset_id = id.ls[[x]], 
+                                            marker_gene = marker.ls[[x]], assay_type = "SCT",
+                                            project_n = names(id.ls)[[x]], n_vari_genes = 3000))
+### dt.ls is a list containing datasets of each lineage ready for Dynverse trajectory analysis
+
+names(dt.ls) <- names(id.ls)
+saveRDS(dt.ls, file = "./Rdata/dynverse_datasets.rds")
+```
+
+
+### Given the jackstraw and elbow plot results, select the PC numbers used for each lineage
+```{r PC_number}
+pc.ls <- list ("erythroid" = 7L,
+               "pronephric" = 7L,
+               "cardiac" = 9L,
+               "atrium_fin" = 7L,
+               "vascular" = 9L,
+               "a_endo" = 10L,
+               "p_endo" = 8L ,
+               "presomitic" = 12L,
+               "pharyn_1" = 8L,
+               "pharyn_2" = 9L,
+               "hatching_1" = 6L,
+               "hatching_2" = 6L
+               )
+### the PC numbers don't seem to affect the downstream analysis too much
+```
+
+### Infer trajectory using slingshot in dynverse 
+```{r infer_trajectory, eval=FALSE}
+### using slingshot as default for generating trajectory models
+md.ls <- lapply(c(1:length(id.ls)), 
+                function(x) dyn_slingshot_plot(dataset = dt.ls[[x]], 
+                                               n_dataset = names(id.ls)[[x]], 
+                                               marker_gene = marker.ls[[x]], 
+                                               ndim = pc.ls[[x]]))
+### plots saved in dynverse_plot folder
+
+```
+
+
+### Checking the plots and add roots to the trajectory models
+```{r add_root, eval=FALSE}
+### milestone grouping number
+rt.ls <- list ("erythroid" = "3", "pronephric" = "4", "cardiac" = "5", "atrium_fin" = "4",
+               "vascular" = "4", "a_endo" = "4", "p_endo" = "4" ,"presomitic" = "3",
+               "pharyn_1" = "4", "pharyn_2" = "3","hatching_1" = "5", "hatching_2" = "4")
+
+md.ls <- lapply(c(1:length(id.ls)),
+                function(x) add_root(md.ls[[x]], root_milestone_id = rt.ls[[x]]))
+names(md.ls) <- names(id.ls)
+save(md.ls, dt.ls, file = "./Rdata/trajectory.RData")
+
+```
+
+
+```{r echo=FALSE}
+### both dt.ls and md.ls take a long time to generate, so load pre-computed one directly
+### the code above for demonstration purpose
+
+load("./Rdata/trajectory.RData")
+
+```
+
+
+### Plot gata5 expression across trajectory
+```{r geompoint_gata5, fig.height=3, fig.width=4.5, warning=FALSE, cache=T}
+### generate pseudotime and gene (gata5) expression dataframe and plot gata5 expression for each lineage
+g5.tp.ls <- lapply(c(1:length(id.ls)),
+                function(x) geneAcrossPseudoT(model = md.ls[[x]], dataset = dt.ls[[x]], 
+                                              n_dataset = names(id.ls)[[x]], gene = "gata5",
+                                              name = "PamCluster"))
+names(g5.tp.ls) <- names(id.ls)
+### plots saved in dynverse_plot folder
+```
+
+### Plot gata6 expression across trajectory
+```{r geompoint_gata6, fig.height=3, fig.width=4.5, warning=FALSE, cache=T}
+### generate pseudotime and gene (gata6) expression dataframe and plot gata6 expression for each lineage
+g6.tp.ls <- lapply(c(1:length(id.ls)),
+                      function(x) geneAcrossPseudoT(model = md.ls[[x]], dataset = dt.ls[[x]], 
+                                                    n_dataset = names(id.ls)[[x]], gene = "gata6",
+                                                    name = "PamCluster"))
+names(g6.tp.ls) <- names(id.ls)
+### plots saved in dynverse_plot folder
+```
+
+### Plot the trajectory in the same color scheme
+```{r trajector_plot, fig.height=3, fig.width=4, warning=FALSE, cache=TRUE}
+### plot the trajectory of each lineage using customized color scheme
+lapply(c(1:length(id.ls)),
+       function(x) plotCustomize(model = md.ls[[x]], dataset = dt.ls[[x]],
+                                 n_dataset = names(id.ls)[[x]], name = "slingshotPam.tp"))
+### plots saved in dynverse_plot folder
+```
+
+### Prepare for making gata5 heatmap: scale the pseudo time within each time point for each lineage
+```{r prepare_heatmap}
+g5.eachT.bin.ls <- lapply(g5.tp.ls, function(df) quantileBin_byTime(df))
+df.g5.eachTQ <- data.frame(do.call(rbind, g5.eachT.bin.ls))
+colnames(df.g5.eachTQ) <- names(g5.eachT.bin.ls[[1]])
+```
+
+### Plot gata5-pseudotime heatmap
+```{r histogram_label}
+### get the color bar for lineage clustering (col) and timepoint (row) 
+hclust.1 <- hclust(dist(as.matrix(df.g5.eachTQ), method="canberra"), method="ward.D")
+plot(hclust.1,hang=0.2, cex=0.7) ## check where to cut the tree
+abline(h=20,col="red")
+group.1 <- cutree(hclust.1,h=20) ## 4 groups
+group.1.col <- factor(group.1, levels=as.vector(seq(1,4)), labels = brewer.pal(4, "Greys"))
+
+
+## row color
+time_label <- sapply(colnames(df.g5.eachTQ), function(x) unlist(strsplit(x, "[.]"))[1])
+time_label <- factor(time_label, levels = c("6h", "8h", "10h", "13h"), 
+                     labels = c("#001b8f", "#06c8f9", "#FFBC01", "#7c000c"))
+
+
+```
+
+```{r heatmap, fig.height=5, fig.width=7}
+heatmap.2(as.matrix(df.g5.eachTQ), 
+          col=colorRampPalette(rev(brewer.pal(n = 5, name = "RdBu")))(1024), 
+          #breaks= breaks <- seq(min(df.g5.bin, na.rm = T), max(df.g5.bin, na.rm = T), 
+          #                      length.out = 1025),
+          Colv = F, na.rm = F, na.color = "black",
+          distfun = function(x) dist(x,method = 'canberra'),
+          #scale="column",
+          hclustfun = function(x) hclust(x, method="ward.D"), 
+          dendrogram="row", density.info="none", trace="none",
+          #sepcolor = "black", sepwidth = c(5, 5),
+          hline=F, vline=F, srtCol =NULL,
+          key = TRUE, keysize = 1.5, #breaks = col_breaks1,
+          RowSideColors = as.character(group.1.col),
+          ColSideColors = as.character(time_label),
+          colsep = c(10,20,30), sepwidth = c(0.1,0),
+          cexCol = 1.2, cexRow = 1.2, margins = c(8,6) #lheig = c(0, 0, 0)
+          #offsetRow = 0.3, offsetCol = 0.3
+          
+          )
+
+```
+
