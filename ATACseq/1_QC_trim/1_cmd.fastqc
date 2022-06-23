@@ -1,0 +1,40 @@
+### first batch of sequencing
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/180713_D00423_0308_ACCLBMANXX_ATAC/WL1593_none_embryo-8hpf-control_NA_none_danrer_0406-R1_FACS-GFPposi_TCAG1.R1.fastq.gz -o ./
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/180713_D00423_0308_ACCLBMANXX_ATAC/WL1594_none_embryo-8hpf-gata56kd_NA_none_danrer_0406-R1_FACS-GFPposi_TCAG1.R1.fastq.gz -o ./
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/180713_D00423_0308_ACCLBMANXX_ATAC/WL1595_none_embryo-8hpf-aplnrkd_NA_none_danrer_0406-R1_FACS-GFPposi_TCAG1.R1.fastq.gz -o ./
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/180713_D00423_0308_ACCLBMANXX_ATAC/WL1596_none_embryo-8hpf-control_NA_none_danrer_0406-R1_FACS-GFPnega_TCAG1.R1.fastq.gz -o ./
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/180713_D00423_0308_ACCLBMANXX_ATAC/WL1597_none_embryo-8hpf-gata56kd_NA_none_danrer_0406-R1_FACS-GFPnega_TCAG1.R1.fastq.gz -o ./
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/180713_D00423_0308_ACCLBMANXX_ATAC/WL1598_none_embryo-8hpf-aplnrkd_NA_none_danrer_0406-R1_FACS-GFPnega_TCAG1.R1.fastq.gz -o ./
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/180713_D00423_0308_ACCLBMANXX_ATAC/WL1599_none_embryo-8hpf-aplnrkd_NA_none_danrer_0504-R2_FACS-GFPposi_TCAG1.R1.fastq.gz -o ./
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/180713_D00423_0308_ACCLBMANXX_ATAC/WL1600_none_embryo-8hpf-aplnrkd_NA_none_danrer_0504-R2_FACS-GFPnega_TCAG1.R1.fastq.gz -o ./
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/180713_D00423_0308_ACCLBMANXX_ATAC/WL1601_none_embryo-8hpf-control_NA_none_danrer_0525-R2_FACS-GFPposi_TCAG1.R1.fastq.gz -o ./
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/180713_D00423_0308_ACCLBMANXX_ATAC/WL1602_none_embryo-8hpf-gata56kd_NA_none_danrer_0525-R2_FACS-GFPposi_TCAG1.R1.fastq.gz -o ./
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/180713_D00423_0308_ACCLBMANXX_ATAC/WL1603_none_embryo-8hpf-control_NA_none_danrer_0525-R2_FACS-GFPnega_TCAG1.R1.fastq.gz -o ./
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/180713_D00423_0308_ACCLBMANXX_ATAC/WL1604_none_embryo-8hpf-gata56kd_NA_none_danrer_0525-R2_FACS-GFPnega_TCAG1.R1.fastq.gz -o ./
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/180713_D00423_0308_ACCLBMANXX_ATAC/WL1605_none_embryo-8hpf-control_NA_none_danrer_0713-R3_FACS-GFPposi_TCAG1.R1.fastq.gz -o ./
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/180713_D00423_0308_ACCLBMANXX_ATAC/WL1606_none_embryo-8hpf-gata56kd_NA_none_danrer_0713-R3_FACS-GFPposi_TCAG1.R1.fastq.gz -o ./
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/180713_D00423_0308_ACCLBMANXX_ATAC/WL1607_none_embryo-8hpf-aplnrkd_NA_none_danrer_0713-R3_FACS-GFPposi_TCAG1.R1.fastq.gz -o ./
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/180713_D00423_0308_ACCLBMANXX_ATAC/WL1608_none_embryo-8hpf-control_NA_none_danrer_0713-R3_FACS-GFPnega_TCAG1.R1.fastq.gz -o ./
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/180713_D00423_0308_ACCLBMANXX_ATAC/WL1609_none_embryo-8hpf-gata56kd_NA_none_danrer_0713-R3_FACS-GFPnega_TCAG1.R1.fastq.gz -o ./
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/180713_D00423_0308_ACCLBMANXX_ATAC/WL1610_none_embryo-8hpf-aplnrkd_NA_none_danrer_0713-R3_FACS-GFPnega_TCAG1.R1.fastq.gz -o ./
+
+### second batch of sequencing
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/181016_D00423_0328_BCCT97ANXX/WL1593_none_embryo-8hpf-control_NA_none_danrer_0406-R1_FACS-GFPposi_TCAG1.R1.fastq.gz -o ./
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/181016_D00423_0328_BCCT97ANXX/WL1594_none_embryo-8hpf-gata56kd_NA_none_danrer_0406-R1_FACS-GFPposi_TCAG1.R1.fastq.gz
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/181016_D00423_0328_BCCT97ANXX/WL1595_none_embryo-8hpf-aplnrkd_NA_none_danrer_0406-R1_FACS-GFPposi_TCAG1.R1.fastq.gz
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/181016_D00423_0328_BCCT97ANXX/WL1596_none_embryo-8hpf-control_NA_none_danrer_0406-R1_FACS-GFPnega_TCAG1.R1.fastq.gz
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/181016_D00423_0328_BCCT97ANXX/WL1597_none_embryo-8hpf-gata56kd_NA_none_danrer_0406-R1_FACS-GFPnega_TCAG1.R1.fastq.gz
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/181016_D00423_0328_BCCT97ANXX/WL1598_none_embryo-8hpf-aplnrkd_NA_none_danrer_0406-R1_FACS-GFPnega_TCAG1.R1.fastq.gz
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/181016_D00423_0328_BCCT97ANXX/WL1599_none_embryo-8hpf-aplnrkd_NA_none_danrer_0504-R2_FACS-GFPposi_TCAG1.R1.fastq.gz
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/181016_D00423_0328_BCCT97ANXX/WL1601_none_embryo-8hpf-control_NA_none_danrer_0525-R2_FACS-GFPposi_TCAG1.R1.fastq.gz
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/181016_D00423_0328_BCCT97ANXX/WL1602_none_embryo-8hpf-gata56kd_NA_none_danrer_0525-R2_FACS-GFPposi_TCAG1.R1.fastq.gz
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/181016_D00423_0328_BCCT97ANXX/WL1603_none_embryo-8hpf-control_NA_none_danrer_0525-R2_FACS-GFPnega_TCAG1.R1.fastq.gz
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/181016_D00423_0328_BCCT97ANXX/WL1604_none_embryo-8hpf-gata56kd_NA_none_danrer_0525-R2_FACS-GFPnega_TCAG1.R1.fastq.gz
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/181016_D00423_0328_BCCT97ANXX/WL1605_none_embryo-8hpf-control_NA_none_danrer_0713-R3_FACS-GFPposi_TCAG1.R1.fastq.gz
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/181016_D00423_0328_BCCT97ANXX/WL1606_none_embryo-8hpf-gata56kd_NA_none_danrer_0713-R3_FACS-GFPposi_TCAG1.R1.fastq.gz
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/181016_D00423_0328_BCCT97ANXX/WL1607_none_embryo-8hpf-aplnrkd_NA_none_danrer_0713-R3_FACS-GFPposi_TCAG1.R1.fastq.gz
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/181016_D00423_0328_BCCT97ANXX/WL1608_none_embryo-8hpf-control_NA_none_danrer_0713-R3_FACS-GFPnega_TCAG1.R1.fastq.gz
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/181016_D00423_0328_BCCT97ANXX/WL1609_none_embryo-8hpf-gata56kd_NA_none_danrer_0713-R3_FACS-GFPnega_TCAG1.R1.fastq.gz
+fastqc /hpf/largeprojects/mdwilson/repository_V2/original_tar/181016_D00423_0328_BCCT97ANXX/WL1610_none_embryo-8hpf-aplnrkd_NA_none_danrer_0713-R3_FACS-GFPnega_TCAG1.R1.fastq.gz
+
+

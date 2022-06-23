@@ -1,0 +1,2 @@
+[xuefei@qlogin12 gfp_g56_intersect]$ cat ../../output_table/{wt_gfpPosiVSNega,gfpPosi_wtVSg56KD,gfpNega_wtVSg56KD}.edgeRGLM.pV_0.05.fold_1.{close,open}.bed | sortBed| mergeBed | awk -F"\t" '{OFS="\t";}{print $1,$2,$3, $1":"$2"-"$3}' > union.bed
+

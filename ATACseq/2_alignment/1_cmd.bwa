@@ -1,0 +1,19 @@
+align_reads.py -1 WL1593_none_embryo-8hpf-control_NA_none_danrer_0406-R1_FACS-GFPposi_TCAG1 -g drer_zv11 -e fastq.gz --truncate 0 -t 16 --local
+align_reads.py -1 WL1594_none_embryo-8hpf-gata56kd_NA_none_danrer_0406-R1_FACS-GFPposi_TCAG1 -g drer_zv11 -e fastq.gz --truncate 0 -t 16 --local
+align_reads.py -1 WL1595_none_embryo-8hpf-aplnrkd_NA_none_danrer_0406-R1_FACS-GFPposi_TCAG1 -g drer_zv11 -e fastq.gz --truncate 0 -t 16 --local
+align_reads.py -1 WL1596_none_embryo-8hpf-control_NA_none_danrer_0406-R1_FACS-GFPnega_TCAG1 -g drer_zv11 -e fastq.gz --truncate 0 -t 16 --local
+align_reads.py -1 WL1597_none_embryo-8hpf-gata56kd_NA_none_danrer_0406-R1_FACS-GFPnega_TCAG1 -g drer_zv11 -e fastq.gz --truncate 0 -t 16 --local
+align_reads.py -1 WL1598_none_embryo-8hpf-aplnrkd_NA_none_danrer_0406-R1_FACS-GFPnega_TCAG1 -g drer_zv11 -e fastq.gz --truncate 0 -t 16 --local
+align_reads.py -1 WL1599_none_embryo-8hpf-aplnrkd_NA_none_danrer_0504-R2_FACS-GFPposi_TCAG1 -g drer_zv11 -e fastq.gz --truncate 0 -t 16 --local
+align_reads.py -1 WL1600_none_embryo-8hpf-aplnrkd_NA_none_danrer_0504-R2_FACS-GFPnega_TCAG1 -g drer_zv11 -e fastq.gz --truncate 0 -t 16 --local
+align_reads.py -1 WL1601_none_embryo-8hpf-control_NA_none_danrer_0525-R2_FACS-GFPposi_TCAG1 -g drer_zv11 -e fastq.gz --truncate 0 -t 16 --local
+align_reads.py -1 WL1602_none_embryo-8hpf-gata56kd_NA_none_danrer_0525-R2_FACS-GFPposi_TCAG1 -g drer_zv11 -e fastq.gz --truncate 0 -t 16 --local
+align_reads.py -1 WL1603_none_embryo-8hpf-control_NA_none_danrer_0525-R2_FACS-GFPnega_TCAG1 -g drer_zv11 -e fastq.gz --truncate 0 -t 16 --local
+align_reads.py -1 WL1604_none_embryo-8hpf-gata56kd_NA_none_danrer_0525-R2_FACS-GFPnega_TCAG1 -g drer_zv11 -e fastq.gz --truncate 0 -t 16 --local
+align_reads.py -1 WL1605_none_embryo-8hpf-control_NA_none_danrer_0713-R3_FACS-GFPposi_TCAG1 -g drer_zv11 -e fastq.gz --truncate 0 -t 16 --local
+align_reads.py -1 WL1606_none_embryo-8hpf-gata56kd_NA_none_danrer_0713-R3_FACS-GFPposi_TCAG1 -g drer_zv11 -e fastq.gz --truncate 0 -t 16 --local
+align_reads.py -1 WL1607_none_embryo-8hpf-aplnrkd_NA_none_danrer_0713-R3_FACS-GFPposi_TCAG1 -g drer_zv11 -e fastq.gz --truncate 0 -t 16 --local
+align_reads.py -1 WL1608_none_embryo-8hpf-control_NA_none_danrer_0713-R3_FACS-GFPnega_TCAG1 -g drer_zv11 -e fastq.gz --truncate 0 -t 16 --local
+align_reads.py -1 WL1609_none_embryo-8hpf-gata56kd_NA_none_danrer_0713-R3_FACS-GFPnega_TCAG1 -g drer_zv11 -e fastq.gz --truncate 0 -t 16 --local
+align_reads.py -1 WL1610_none_embryo-8hpf-aplnrkd_NA_none_danrer_0713-R3_FACS-GFPnega_TCAG1 -g drer_zv11 -e fastq.gz --truncate 0 -t 16 --local
+

@@ -1,0 +1,47 @@
+#### computeMatrix
+[xuefei@qlogin2 aggrePlot]$ echo "computeMatrix reference-point --referencePoint center -b 250 -a 250 -R ../../midPoints/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.mid.bed ../../midPoints/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.mid.bed ../../midPoints/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.close.mid.bed ../../midPoints/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.open.mid.bed -S ~/mdwilson/xuefei/reference/danRer/zv11/gc5Base.bw -bs 5 -o 4DARs.4bw.250bp.5bin.gz --outFileNameMatrix 4DARs.4bw.250bp.5bin.tab -p 16 --smartLabels" | queue_commands.py -i - -p matrix4DARs -qsub_memory 15g -q parallel -T 16
+
+[xuefei@qlogin2 aggrePlot]$ echo "computeMatrix reference-point --referencePoint center -b 250 -a 250 -R ../../midPoints/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.mid.bed ../../midPoints/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.mid.bed ../../midPoints/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.close.mid.bed ../../midPoints/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.open.mid.bed ../../midPoints/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.close.mid.bed ../../midPoints/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.open.mid.bed -S ~/mdwilson/xuefei/reference/danRer/zv11/gc5Base.bw -bs 5 -o 6DARs.4bw.250bp.5bin.gz --outFileNameMatrix 6DARs.4bw.250bp.5bin.tab -p 16 --smartLabels" | queue_commands.py -i - -p matrix6DARs -qsub_memory 15g -q parallel -T 16
+
+[xuefei@qlogin2 aggrePlot]$ echo "computeMatrix reference-point --referencePoint center -b 500 -a 500 -R ../../midPoints/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.mid.bed ../../midPoints/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.mid.bed ../../midPoints/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.close.mid.bed ../../midPoints/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.open.mid.bed -S ~/mdwilson/xuefei/reference/danRer/zv11/gc5Base.bw -bs 5 -o 4DARs.4bw.500bp.5bin.gz --outFileNameMatrix 4DARs.4bw.500bp.5bin.tab -p 16 --smartLabels" | queue_commands.py -i - -p matrix4DARs -qsub_memory 15g -q parallel -T 16
+
+[xuefei@qlogin2 aggrePlot]$ echo "computeMatrix scale-regions -m 500 -b 500 -a 500 -R ../../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.bed ../../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.bed ../../output_table/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.close.bed ../../output_table/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.open.bed -S ~/mdwilson/xuefei/reference/danRer/zv11/gc5Base.bw -bs 5 -o 4DARs.4bw.500bp.5bin.scale.gz --outFileNameMatrix 4DARs.4bw.500bp.5bin.scale.tab -p 16 --smartLabels" | queue_commands.py -i - -p matrix4DARs -qsub_memory 15g -q parallel -T 16
+
+[xuefei@qlogin2 aggrePlot]$ echo "computeMatrix scale-regions -m 500 -b 500 -a 500 -R ../../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.bed ../../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.bed ../../output_table/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.close.bed ../../output_table/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.open.bed ../../output_table/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.close.mid.bed ../../output_table/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.open.mid.bed -S ~/mdwilson/xuefei/reference/danRer/zv11/gc5Base.bw -bs 5 -o 6DARs.4bw.500bp.5bin.scale.gz --outFileNameMatrix 6DARs.4bw.500bp.5bin.scale.tab -p 16 --smartLabels" | queue_commands.py -i - -p matrix -qsub_memory 15g -q parallel -T 16
+
+
+#### plot aggregate plots
+[xuefei@qlogin2 aggrePlot]$ plotProfile -m 6DARs.4bw.250bp.5bin.gz -o 6DARs.4bw.250bp.5bin.trace.pdf --plotType se --refPointLabel peak_center --regionsLabel g56KD_close g56KD_open aplnrKD_close aplnrKD_open g5GFP_open g5GFP_close --samplesLabel GC_content --numPlotsPerRow 2 
+
+[xuefei@qlogin2 aggrePlot]$ plotProfile -m 4DARs.4bw.500bp.5bin.scale.gz -o 4DARs.4bw.500bp.5bin.scale.trace.pdf --startLabel peak_start --endLabel peak_end --plotType se --regionsLabel g56KD_close g56KD_open aplnrKD_close aplnrKD_open --samplesLabel GC_content
+
+[xuefei@qlogin2 aggrePlot]$ plotProfile -m 6DARs.4bw.500bp.5bin.scale.gz -o 6DARs.4bw.500bp.5bin.scale.trace.pdf --startLabel peak_start --endLabel peak_end --plotType se --regionsLabel g56KD_close g56KD_open aplnrKD_close aplnrKD_open g5GFP+specific g5GFP-specific --samplesLabel GC_content
+
+
+
+
+### show DARs upon g56KD and shared regions 
+[xuefei@qlogin2 aggrePlot]$ echo "computeMatrix scale-regions -m 500 -b 500 -a 500 -R ../../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.bed ../../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.bed ../../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.shared.bed -S ~/mdwilson/xuefei/reference/danRer/zv11/gc5Base.bw -bs 5 -o gfpPosi_wtVSg56KD.500bp.5bin.scale.gz --outFileNameMatrix gfpPosi_wtVSg56KD.500bp.5bin.scale.tab -p 16 --smartLabels"| queue_commands.py -i - -p matrix4DARs -qsub_memory 20g -q parallel -T 16
+
+[xuefei@qlogin2 aggrePlot]$ plotProfile -m gfpPosi_wtVSg56KD.500bp.5bin.scale.gz -o gfpPosi_wtVSg56KD.500bp.5bin.scale.trace.pdf --startLabel peak_start --endLabel peak_end --plotType se --samplesLabel GC_content --regionsLabel g56KD_close g56KD_open g56KD_shared
+
+
+### show DARs and shared regions upon aplnrKD
+[xuefei@qlogin2 aggrePlot]$ echo "computeMatrix scale-regions -m 500 -b 500 -a 500 -R ../../output_table/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.close.bed ../../output_table/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.open.bed ../../output_table/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.shared.bed -S ~/mdwilson/xuefei/reference/danRer/zv11/gc5Base.bw -bs 5 -o gfpPosi_wtVSaplrnKD.500bp.5bin.scale.gz --outFileNameMatrix gfpPosi_wtVSaplnrKD.500bp.5bin.scale.tab -p 16 --smartLabels"| queue_commands.py -i - -p matrix -qsub_memory 20g -q parallel -T 16
+
+[xuefei@qlogin2 aggrePlot]$ plotProfile -m gfpPosi_wtVSaplrnKD.500bp.5bin.scale.gz -o gfpPosi_wtVSaplrnKD.500bp.5bin.scale.trace.pdf --startLabel peak_start --endLabel peak_end --plotType se --samplesLabel GC_content --regionsLabel aplnrKD_close aplnrKD_open aplnrKD_shared
+
+### show g5GFP+/- specific and shared regions
+[xuefei@qlogin2 aggrePlot]$ echo computeMatrix "scale-regions -m 500 -b 500 -a 500 -R ../../output_table/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.close.bed ../../output_table/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.open.bed ../../output_table/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.shared.bed -S ~/mdwilson/xuefei/reference/danRer/zv11/gc5Base.bw -bs 5 -o gfpPosi_wtVSaplrnKD.500bp.5bin.scale.gz --outFileNameMatrix gfpPosi_wtVSaplnrKD.500bp.5bin.scale.tab -p 16 --smartLabels"| queue_commands.py -i - -p matrix -qsub_memory 20g -q parallel -T 16
+
+[xuefei@qlogin2 aggrePlot]$ plotProfile -m wt_gfpPosiVSNega.500bp.5bin.scale.gz -o wt_gfpPosiVSNega.500bp.5bin.scale.trace.pdf --startLabel peak_start --endLabel peak_end --plotType se --samplesLabel GC_content --regionsLabel g5GFP+specific g5GFP-specific shared
+
+### show g5GFP+/- together with g56KD results
+
+echo "computeMatrix scale-regions -m 500 -b 500 -a 500 -R ../../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.bed ../../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.bed ../../output_table/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.close.bed ../../output_table/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.open.bed -S ~/mdwilson/xuefei/reference/danRer/zv11/gc5Base.bw -bs 5 -o gfp_g56_4DARs.4bw.500bp.5bin.scale.gz --outFileNameMatrix gfp_g56_4DARs.4bw.500bp.5bin.scale.tab" | queue_commands.py -i - -p matrix4DARs -qsub_memory 64g -q parallel -T 16
+
+plotProfile -m gfp_g56_4DARs.4bw.500bp.5bin.scale.gz -o gfp_g56_4DARs.500bp.5bin.scale.trace.pdf --startLabel peak_start --endLabel peak_end --plotType se --samplesLabel GC_content --regionsLabel g56KD_close g56KD_open g5GFP+specific g5GFP-specific
+
+echo "computeMatrix scale-regions -m 500 -b 500 -a 500 -R ../../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.bed ../../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.bed ../../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.shared.bed ../../output_table/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.close.bed ../../output_table/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.open.bed ../../output_table/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.shared.bed -S ~/mdwilson/xuefei/reference/danRer/zv11/gc5Base.bw -bs 5 -o gfp_g56_6DARs.4bw.500bp.5bin.scale.gz --outFileNameMatrix gfp_g56_6DARs.4bw.500bp.5bin.scale.tab" | queue_commands.py -i - -p matrix6DARs -qsub_memory 64g -q parallel -T 16
+
+plotProfile -m gfp_g56_6DARs.4bw.500bp.5bin.scale.gz -o gfp_g56_6DARs.500bp.5bin.scale.trace.pdf --startLabel peak_start --endLabel peak_end --plotType se --samplesLabel GC_content --regionsLabel g56KD_close g56KD_open g56kD_shared g5GFP+specific g5GFP-specific g5GFP_shared 

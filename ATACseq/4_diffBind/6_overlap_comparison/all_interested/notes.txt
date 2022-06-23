@@ -1,0 +1,3 @@
+[xuefei@qlogin5 all_interested]$ cat ../../output_table/{wt_gfpPosiVSNega,gfpPosi_wtVSaplnrKD,gfpPosi_wtVSg56KD}.edgeRGLM.pV_0.05.fold_1.{close,open}.bed | sortBed| mergeBed | awk -F"\t" '{OFS="\t";}{print $1,$2,$3, $1":"$2"-"$3}' > union.bed
+
+[xuefei@qlogin5 all_interested]$ for f in ../../output_table/{wt_gfpPosiVSNega,gfpPosi_wtVSaplnrKD,gfpPosi_wtVSg56KD}.edgeRGLM.pV_0.05.fold_1.{close,open}.bed; do pre=`basename $f .bed`; echo "intersectBed -u -a union.bed -b $f > $pre.u.bed"; done > cmd.intersect

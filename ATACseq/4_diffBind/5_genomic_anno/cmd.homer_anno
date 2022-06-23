@@ -1,0 +1,12 @@
+annotatePeaks.pl ../output_table/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.close.bed danRer11 -annStats wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.close.stat > wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.close.anno
+annotatePeaks.pl ../output_table/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.open.bed danRer11 -annStats wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.open.stat > wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.open.anno
+annotatePeaks.pl ../output_table/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.all.bed danRer11 -annStats wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.all.stat > wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.all.anno
+annotatePeaks.pl ../output_table/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.shared.bed danRer11 -annStats wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.shared.stat > wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.shared.anno
+annotatePeaks.pl ../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.bed danRer11 -annStats gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.stat > gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.anno
+annotatePeaks.pl ../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.bed danRer11 -annStats gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.stat > gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.anno
+annotatePeaks.pl ../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.all.bed danRer11 -annStats gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.all.stat > gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.all.anno
+annotatePeaks.pl ../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.shared.bed danRer11 -annStats gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.shared.stat > gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.shared.anno
+annotatePeaks.pl ../output_table/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.close.bed danRer11 -annStats gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.close.stat > gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.close.anno
+annotatePeaks.pl ../output_table/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.open.bed danRer11 -annStats gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.open.stat > gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.open.anno
+annotatePeaks.pl ../output_table/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.all.bed danRer11 -annStats gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.all.stat > gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.all.anno
+annotatePeaks.pl ../output_table/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.shared.bed danRer11 -annStats gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.shared.stat > gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.shared.anno

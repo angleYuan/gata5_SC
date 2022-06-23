@@ -1,0 +1,1 @@
+direct output from DiffBind has some boundary issues (likely due to the versions that I was using), it reaches outside the boundary of chromosome size for some unknown reason, bedtool shift can cap the coordinates back into the boundary again

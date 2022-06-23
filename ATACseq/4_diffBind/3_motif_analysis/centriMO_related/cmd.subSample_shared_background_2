@@ -1,0 +1,6 @@
+../../local_scripts/subsample_diffCentriMO_v2.sh ../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_0.close.bed 250 . 1 5
+../../local_scripts/subsample_diffCentriMO_v2.sh ../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.5.close.bed 250 . 1 5
+../../local_scripts/subsample_diffCentriMO_v2.sh ../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.bed 250 . 1 5
+../../local_scripts/subsample_diffCentriMO_v2.sh ../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_0.open.bed 250 . 1 5
+../../local_scripts/subsample_diffCentriMO_v2.sh ../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.5.open.bed 250 . 1 5
+../../local_scripts/subsample_diffCentriMO_v2.sh ../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.bed 250 . 1 5

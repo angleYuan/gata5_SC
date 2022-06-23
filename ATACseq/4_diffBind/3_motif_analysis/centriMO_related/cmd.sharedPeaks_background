@@ -1,0 +1,4 @@
+../../../local_scripts/centriMO_allShared.sh ../single_centriMo_500/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.close.250.single/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.close.250.fa ./
+../../../local_scripts/centriMO_allShared.sh ../single_centriMo_500/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.open.250.single/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.open.250.fa ./
+../../../local_scripts/centriMO_allShared.sh ../single_centriMo_500/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.250.single/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.250.fa ./
+../../../local_scripts/centriMO_allShared.sh ../single_centriMo_500/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.250.single/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.250.fa ./

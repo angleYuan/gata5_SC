@@ -1,0 +1,13 @@
+../../local_scripts/jasper_homer_motif.sh ../fasta/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_0.close.fa .
+../../local_scripts/jasper_homer_motif.sh ../fasta/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.fa .
+../../local_scripts/jasper_homer_motif.sh ../fasta/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_0.open.fa .
+../../local_scripts/jasper_homer_motif.sh ../fasta/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.fa .
+../../local_scripts/jasper_homer_motif.sh ../fasta/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_0.close.fa .
+../../local_scripts/jasper_homer_motif.sh ../fasta/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.close.fa .
+../../local_scripts/jasper_homer_motif.sh ../fasta/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_0.open.fa .
+../../local_scripts/jasper_homer_motif.sh ../fasta/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.open.fa .
+
+../../local_scripts/jasper_homer_motif.sh /home/xuefei/mdwilson/xuefei/projects/2018_ATACseq/merged/zv11/diffBind/fasta/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.fa .
+../../local_scripts/jasper_homer_motif.sh /home/xuefei/mdwilson/xuefei/projects/2018_ATACseq/merged/zv11/diffBind/fasta/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.fa .
+../../local_scripts/jasper_homer_motif.sh /home/xuefei/mdwilson/xuefei/projects/2018_ATACseq/merged/zv11/diffBind/fasta/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.close.fa .
+../../local_scripts/jasper_homer_motif.sh /home/xuefei/mdwilson/xuefei/projects/2018_ATACseq/merged/zv11/diffBind/fasta/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.open.fa .

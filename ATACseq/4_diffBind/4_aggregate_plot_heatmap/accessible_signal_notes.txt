@@ -1,0 +1,49 @@
+##### tried to calculate and plot different combinations of peaksets
+[xuefei@qlogin2 heatmaps]$ echo "computeMatrix reference-point --referencePoint center -b 3000 -a 3000 -R ../midPoints/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.mid.bed ../midPoints/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.mid.bed ../midPoints/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.close.mid.bed ../midPoints/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.open.mid.bed -S merge_bwa_bw/control_g5GFPposi.2R.norm.bw merge_bwa_bw/g56KD_g5GFPposi.3R.norm.bw merge_bwa_bw/aplnrKD_g5GFPposi.2R.norm.bw merge_bwa_bw/control_g5GFPnega.2R.norm.bw -o g56_aplnr.DARs.4bw.3kb.gz --outFileNameMatrix g56_aplnr.DARs.4bw.3kb.tab --missingDataAsZero -p 16 --smartLabels" | queue_commands.py -i - -p matrix4bw -qsub_memory 20g -q parallel -T 16
+
+[xuefei@qlogin2 heatmaps]$ echo "computeMatrix reference-point --referencePoint center -b 3000 -a 3000 -R ../midPoints/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.mid.bed ../midPoints/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.mid.bed ../midPoints/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.close.mid.bed ../midPoints/gfpPosi_wtVSaplnrKD.edgeRGLM.pV_0.05.fold_1.open.mid.bed ../midPoints/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.close.mid.bed ../midPoints/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.open.mid.bed -S merge_bwa_bw/control_g5GFPposi.2R.norm.bw merge_bwa_bw/g56KD_g5GFPposi.3R.norm.bw merge_bwa_bw/aplnrKD_g5GFPposi.2R.norm.bw merge_bwa_bw/control_g5GFPnega.2R.norm.bw -o 6bed_DARs.4bw.3kb.gz --outFileNameMatrix 6bed_DARs.4bw.3kb.tab --missingDataAsZero -p 16 --smartLabels" | queue_commands.py -i - -p matrix4bw -qsub_memory 30g -q parallel -T 16
+
+[xuefei@qlogin2 heatmaps]$ plotHeatmap -m g56_aplnr.DARs.4bw.3kb.gz -out 4bed_DARs.4bw.3kb.pdf --colorMap Reds --sortRegions no --refPointLabel peak_center --regionsLabel g56KD_close g56KD_open aplnrKD_close aplnrKD_open --samplesLabel control_GFPposi g56KD_GFPposi aplnrKD_GFPposi control_GFPnega
+
+[xuefei@qlogin2 heatmaps]$ plotHeatmap -m 6bed_DARs.4bw.3kb.gz -out 6bed_DARs.4bw.3kb.pdf --colorMap Reds --sortRegions no --refPointLabel peak_center --regionsLabel g56KD_close g56KD_open aplnrKD_close aplnrKD_open g5GFP+specific g5GFP-specific --samplesLabel control_GFPposi g56KD_GFPposi aplnrKD_GFPposi control_GFPnega
+
+[xuefei@qlogin2 heatmaps]$ plotProfile -m 6bed_DARs.4bw.3kb.gz -o 6bed_DARs.4bw.3kb.trace.pdf --plotType se --refPointLabel peak_center --regionsLabel g56KD_close g56KD_open aplnrKD_close aplnrKD_open g5GFP+specific g5GFP-specific --samplesLabel control_GFPposi g56KD_GFPposi aplnrKD_GFPposi control_GFPnega --numPlotsPerRow 2 
+
+### only plot the gfp and g5KD
+
+echo "computeMatrix reference-point --referencePoint center -b 3000 -a 3000 -R ../midPoints/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.mid.bed ../midPoints/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.mid.bed ../midPoints/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.close.mid.bed ../midPoints/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.open.mid.bed -S merge_bwa_bw/control_g5GFPposi.2R.norm.bw merge_bwa_bw/g56KD_g5GFPposi.3R.norm.bw merge_bwa_bw/control_g5GFPnega.2R.norm.bw merge_bwa_bw/g56KD_g5GFPnega.3R.norm.bw -o g56_gfp.4DARs.4bw.3kb.gz --outFileNameMatrix g56_gfp.4DARs.4bw.3kb.tab --missingDataAsZero -p 16" | queue_commands.py -i - -p matrix4bw -qsub_memory 32g -q parallel -T 16
+
+plotProfile -m g56_gfp.4DARs.4bw.3kb.gz -o g56_gfp.4DARs.4bw.3kb.trace.pdf --plotType se --refPointLabel peak_center --regionsLabel g56KD_close g56KD_open g5GFP+specific g5GFP-specific --samplesLabel control_GFPposi g56KD_GFPposi control_GFPnega g56KD_GFPnega --numPlotsPerRow 2
+
+plotHeatmap -m g56_gfp.4DARs.4bw.3kb.gz -out g56_gfp.4DARs.4bw.3kb.hm.pdf --colorMap Reds --sortRegions no --refPointLabel peak_center --regionsLabel g56KD_close g56KD_open g5GFP+specific g5GFP-specific --samplesLabel control_GFPposi g56KD_GFPposi control_GFPnega g56KD_GFPnega
+
+echo "computeMatrix reference-point --referencePoint center -b 3000 -a 3000 -R ../midPoints/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.mid.bed -S merge_bwa_bw/control_g5GFPposi.2R.norm.bw merge_bwa_bw/g56KD_g5GFPposi.3R.norm.bw merge_bwa_bw/control_g5GFPnega.2R.norm.bw merge_bwa_bw/g56KD_g5GFPnega.3R.norm.bw -o g56_gfp.closeDARs.4bw.3kb.gz --outFileNameMatrix g56_gfp.closeDARs.4bw.3kb.tab --missingDataAsZero -p 16" | queue_commands.py -i - -p matrix4bw -qsub_memory 32g -q parallel -T 16
+
+plotProfile -m g56_gfp.closeDARs.4bw.3kb.gz -o g56_gfp.closeDARs.4bw.3kb.trace.pdf --plotType se --refPointLabel peak_center --regionsLabel g56KD_close --samplesLabel control_GFPposi g56KD_GFPposi control_GFPnega g56KD_GFPnega --perGroup
+
+
+echo "computeMatrix reference-point --referencePoint center -b 3000 -a 3000 -R ../midPoints/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.mid.bed -S merge_bwa_bw/control_g5GFPposi.2R.norm.bw merge_bwa_bw/g56KD_g5GFPposi.3R.norm.bw merge_bwa_bw/control_g5GFPnega.2R.norm.bw merge_bwa_bw/g56KD_g5GFPnega.3R.norm.bw -o g56_gfp.openDARs.4bw.3kb.gz --outFileNameMatrix g56_gfp.openDARs.4bw.3kb.tab --missingDataAsZero -p 16" | queue_commands.py -i - -p matrix4bw -qsub_memory 32g -q parallel -T 16
+
+plotProfile -m g56_gfp.openDARs.4bw.3kb.gz -o g56_gfp.openDARs.4bw.3kb.trace.pdf --plotType se --refPointLabel peak_center --regionsLabel g56KD_open --samplesLabel control_GFPposi g56KD_GFPposi control_GFPnega g56KD_GFPnega --perGroup
+
+echo "computeMatrix reference-point --referencePoint center -b 500 -a 500 -R ../midPoints/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.mid.bed -S merge_bwa_bw/control_g5GFPposi.2R.norm.bw merge_bwa_bw/g56KD_g5GFPposi.3R.norm.bw merge_bwa_bw/control_g5GFPnega.2R.norm.bw merge_bwa_bw/g56KD_g5GFPnega.3R.norm.bw -o g56_gfp.openDARs.4bw.500bp.gz --outFileNameMatrix g56_gfp.openDARs.4bw.500bp.tab --missingDataAsZero -p 16" | queue_commands.py -i - -p matrix4bw -qsub_memory 16g -q parallel -T 16
+
+plotProfile -m g56_gfp.openDARs.4bw.500bp.gz -o g56_gfp.openDARs.4bw.500bp.trace.pdf --plotType se --refPointLabel peak_center --regionsLabel g56KD_open --samplesLabel control_GFPposi g56KD_GFPposi control_GFPnega g56KD_GFPnega --perGroup
+
+plotProfile -m g56_gfp.openDARs.4bw.500bp.gz -o g56_gfp.openDARs.4bw.500bp.trace.col.pdf --plotType se --refPointLabel peak_center --regionsLabel g56KD_open --samplesLabel control_GFPposi g56KD_GFPposi control_GFPnega g56KD_GFPnega --perGroup --colors "#F3872F" "#56B4E9" "#733B1A" "#134C70"
+
+echo "computeMatrix reference-point --referencePoint center -b 500 -a 500 -R ../midPoints/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.mid.bed -S merge_bwa_bw/control_g5GFPposi.2R.norm.bw merge_bwa_bw/g56KD_g5GFPposi.3R.norm.bw merge_bwa_bw/control_g5GFPnega.2R.norm.bw merge_bwa_bw/g56KD_g5GFPnega.3R.norm.bw -o g56_gfp.closeDARs.4bw.500bp.gz --outFileNameMatrix g56_gfp.closeDARs.4bw.500bp.tab --missingDataAsZero -p 16" | queue_commands.py -i - -p matrix4bw -qsub_memory 32g -q parallel -T 16
+
+plotProfile -m g56_gfp.closeDARs.4bw.500bp.gz -o g56_gfp.closeDARs.4bw.500bp.trace.pdf --plotType se --refPointLabel peak_center --regionsLabel g56KD_close --samplesLabel control_GFPposi g56KD_GFPposi control_GFPnega g56KD_GFPnega --perGroup
+
+plotProfile -m g56_gfp.closeDARs.4bw.500bp.gz -o g56_gfp.closeDARs.4bw.500bp.trace.col.pdf --plotType se --refPointLabel peak_center --regionsLabel g56KD_close --samplesLabel control_GFPposi g56KD_GFPposi control_GFPnega g56KD_GFPnega --perGroup --colors "#F3872F" "#56B4E9" "#733B1A" "#134C70"
+
+#### Final plots for WT GFP+ and WT GFP- samples
+
+echo "computeMatrix reference-point --referencePoint center -b 500 -a 500 -R ../midPoints/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.close.mid.bed -S merge_bwa_bw/control_g5GFPposi.2R.norm.bw merge_bwa_bw/g56KD_g5GFPposi.3R.norm.bw merge_bwa_bw/control_g5GFPnega.2R.norm.bw merge_bwa_bw/g56KD_g5GFPnega.3R.norm.bw -o gfp_g56.GFPposi.4bw.500bp.gz --outFileNameMatrix gfp_g56.GFPposi.4bw.500bp.tab --missingDataAsZero -p 16" | queue_commands.py -i - -p matrix4bw -qsub_memory 16g -q parallel -T 16
+
+echo "computeMatrix reference-point --referencePoint center -b 500 -a 500 -R ../midPoints/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.open.mid.bed -S merge_bwa_bw/control_g5GFPposi.2R.norm.bw merge_bwa_bw/g56KD_g5GFPposi.3R.norm.bw merge_bwa_bw/control_g5GFPnega.2R.norm.bw merge_bwa_bw/g56KD_g5GFPnega.3R.norm.bw -o gfp_g56.GFPnega.4bw.500bp.gz --outFileNameMatrix gfp_g56.GFPnega.4bw.500bp.tab --missingDataAsZero -p 16" | queue_commands.py -i - -p matrix4bw -qsub_memory 32g -q parallel -T 16
+
+plotProfile -m gfp_g56.GFPposi.4bw.500bp.gz -o gfp_g56.GFPposi.4bw.500bp.trace.col.pdf --plotType se --refPointLabel peak_center --regionsLabel GFP+_specific --samplesLabel control_GFPposi g56KD_GFPposi control_GFPnega g56KD_GFPnega --perGroup --colors "#F3872F" "#56B4E9" "#733B1A" "#134C70"
+
+plotProfile -m gfp_g56.GFPnega.4bw.500bp.gz -o gfp_g56.GFPnega.4bw.500bp.trace.col.pdf --plotType se --refPointLabel peak_center --regionsLabel GFP-_specific --samplesLabel control_GFPposi g56KD_GFPposi control_GFPnega g56KD_GFPnega --perGroup --colors "#F3872F" "#56B4E9" "#733B1A" "#134C70"

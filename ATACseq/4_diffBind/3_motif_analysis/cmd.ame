@@ -1,0 +1,8 @@
+../../local_scripts/ame.sh ../fasta/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_0.close.fa .
+../../local_scripts/ame.sh ../fasta/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.fa .
+../../local_scripts/ame.sh ../fasta/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_0.open.fa .
+../../local_scripts/ame.sh ../fasta/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.fa .
+../../local_scripts/ame.sh ../fasta/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_0.close.fa .
+../../local_scripts/ame.sh ../fasta/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.close.fa .
+../../local_scripts/ame.sh ../fasta/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_0.open.fa .
+../../local_scripts/ame.sh ../fasta/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.open.fa .

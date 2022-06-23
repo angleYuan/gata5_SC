@@ -1,0 +1,6 @@
+intersectBed -u -a union.bed -b ../../output_table/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.close.bed > wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.close.u.bed
+intersectBed -u -a union.bed -b ../../output_table/wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.open.bed > wt_gfpPosiVSNega.edgeRGLM.pV_0.05.fold_1.open.u.bed
+intersectBed -u -a union.bed -b ../../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.bed > gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.u.bed
+intersectBed -u -a union.bed -b ../../output_table/gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.bed > gfpPosi_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.u.bed
+intersectBed -u -a union.bed -b ../../output_table/gfpNega_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.bed > gfpNega_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.close.u.bed
+intersectBed -u -a union.bed -b ../../output_table/gfpNega_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.bed > gfpNega_wtVSg56KD.edgeRGLM.pV_0.05.fold_1.open.u.bed
